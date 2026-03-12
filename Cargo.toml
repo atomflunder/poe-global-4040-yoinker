@@ -1,0 +1,9 @@
+[package]
+name = "global-4040-yoinker"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+arboard = "3.6.1"
+notify = "8.2.0"
+regex = "1.12.3"
