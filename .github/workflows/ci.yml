@@ -1,0 +1,35 @@
+name: CI
+
+on:
+    push:
+    pull_request:
+
+env:
+    CARGO_TERM_COLOR: always
+
+jobs:
+    ci:
+        name: Run CI on ${{ matrix.os }} - ${{ matrix.toolchain }}
+        runs-on: ${{ matrix.os }}
+        strategy:
+            matrix:
+                os: [ubuntu-latest, windows-latest, macos-latest]
+                toolchain: [stable, beta, nightly]
+        steps:
+            - uses: actions/checkout@v6
+            - name: Setup Rust toolchain
+              uses: actions-rust-lang/setup-rust-toolchain@v1
+              with:
+                  toolchain: ${{ matrix.toolchain }}
+                  components: clippy, rustfmt
+
+            - name: Check formatting
+              run: cargo fmt --check
+
+            - name: Run clippy
+              run: cargo clippy --all
+              env:
+                  RUSTFLAGS: ""
+
+            - name: Test crate
+              run: cargo test --verbose

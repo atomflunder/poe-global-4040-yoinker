@@ -49,3 +49,29 @@ fn main() -> notify::Result<()> {
 
     Ok(())
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_extract_last_invitation() {
+        let content = "#Some-Character: Uber Maven +invite123 +anotherInvite";
+        let result = extract_last_invitation(content);
+        assert_eq!(result, Some("anotherInvite".to_string()));
+    }
+
+    #[test]
+    fn test_extract_no_invitation() {
+        let content = "#Some-Character: Uber Maven";
+        let result = extract_last_invitation(content);
+        assert_eq!(result, None);
+    }
+
+    #[test]
+    fn test_extract_single_invitation() {
+        let content = "#Some-Character: Uber Maven +invite123";
+        let result = extract_last_invitation(content);
+        assert_eq!(result, Some("invite123".to_string()));
+    }
+}
